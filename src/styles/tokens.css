@@ -1,0 +1,24 @@
+:root {
+  color-scheme: light;
+  --paper: #f3f1ec;
+  --paper-light: #fcfbf8;
+  --ink: #16233b;
+  --muted: #596578;
+  --line: #d6dae2;
+  --accent: #1d4ed8;
+  --accent-pale: #e3ecfc;
+  --cobalt: #1d4ed8;
+  --cobalt-pale: #e3ecfc;
+  --cyan: #0e7490;
+  --cyan-pale: #dff3f7;
+  --rust: #c2410c;
+  --rust-pale: #fce8df;
+  --emerald: #15803d;
+  --emerald-pale: #dff5e7;
+  --radius: 5px;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --shadow: 0 18px 45px #16233b14;
+  --max: 1280px;
+}

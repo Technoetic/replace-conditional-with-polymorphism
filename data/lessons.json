@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "dataRevision": "2026-11-21-r1",
+  "lessons": [
+    {
+      "id": "intro",
+      "kicker": "ONE MESSAGE, THREE CARRIERS",
+      "title": "같은 운송장, 다른 배송 규칙을 객체에게 맡기기",
+      "intro": "택배 센터에는 일반·신선 냉장·당일 특송이 함께 들어옵니다. 배송비, 예상 시간, 취급 안내마다 switch (parcel.type)이 반복될 때, 각 유형 클래스가 자기 규칙을 맡도록 바꾸는 기법이 Replace Conditional with Polymorphism입니다.",
+      "takeaway": "같은 타입 분기가 여러 함수에 흩어져 있다면, 분기를 지우고 각 유형 객체에 같은 이름의 메서드를 두세요."
+    },
+    {
+      "id": "read",
+      "kicker": "DISSECT THE SCATTERED SWITCHES",
+      "title": "한 배송 유형의 규칙이 세 함수에 찢어져 있습니다",
+      "intro": "변경 전 코드에서는 shippingFee, estimatedHours, handlingGuide가 모두 parcel.type을 검사합니다. 아래에서 유형을 골라 한 종류의 규칙이 코드 곳곳에 어떻게 흩어져 있는지 확인해 보세요.",
+      "takeaway": "유형 하나를 이해하거나 수정하려고 파일 세 군데를 오가야 한다면, 다형성으로 모을 신호입니다."
+    },
+    {
+      "id": "split",
+      "kicker": "ASSIGN RESPONSIBILITIES",
+      "title": "공통 규칙은 부모로, 유형별 규칙은 자식 클래스로",
+      "intro": "무조건 모든 코드를 복사하지 않습니다. 파손 주의 할증처럼 공통인 계산은 상위 클래스 Parcel에 한 번만 두고, 유형마다 다른 규칙만 하위 클래스가 재정의(override)합니다. 객체 생성 시점의 선택만 createParcel 팩토리 한 곳에 모읍니다.",
+      "takeaway": "상위 클래스는 공통 기반을, 하위 클래스는 유형별 차이를, 팩토리는 생성 시점의 선택 한 곳만 담당합니다."
+    },
+    {
+      "id": "lab",
+      "kicker": "EQUIVALENCE & EXTENSION LAB",
+      "title": "기존 세 유형은 완벽히 같고, 네 번째 유형에서 차이가 벌어집니다",
+      "intro": "일반·신선 냉장·당일 특송의 모든 유효 입력(3,600조합)에서 변경 전후의 배송비·시간·안내는 100% 같습니다. 이제 새 유형 ‘드론 배송(drone)’을 추가하고, switch 한 곳을 빠뜨리는 실수가 어떤 결과를 만드는지 직접 비교해 보세요.",
+      "takeaway": "리팩터링은 기존 동작을 그대로 보존하면서, 새 유형을 추가할 때 수정해야 할 범위를 한 클래스로 좁혀 줍니다."
+    },
+    {
+      "id": "practice",
+      "kicker": "CHECK YOUR UNDERSTANDING",
+      "title": "여섯 문항으로 다형성 전환 기준 확인하기",
+      "intro": "언제 switch를 클래스로 바꾸고, 언제 바꾸지 말아야 하는지 여섯 문제로 점검합니다. 마지막에 내 말로 한 문장을 정리해 두면 다음 코드 리뷰에서 바로 떠올릴 수 있습니다.",
+      "takeaway": "다형성은 무조건 쓰는 정답이 아니라, 같은 타입 분기가 반복되고 변형이 늘어날 때 꺼내는 도구입니다."
+    },
+    {
+      "id": "code",
+      "kicker": "REFERENCE & GUARDRAILS",
+      "title": "실행 가능한 전후 코드와 과잉 설계 경계선",
+      "intro": "세 함수의 switch 코드와 Parcel 계층 + createParcel 팩토리 코드를 나란히 비교합니다. 다형성을 쓰지 않는 편이 나은 경우도 함께 확인하세요.",
+      "takeaway": "호출 쪽은 parcel.fee, parcel.hours, parcel.guide만 부르고, 새 배송 수단은 기존 클래스를 고치지 않고 추가합니다."
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1-signal",
+      "prompt": "Replace Conditional with Polymorphism을 적용하기 가장 좋은 신호는 무엇인가요?",
+      "options": [
+        { "id": "single-if", "text": "한 함수 안에 단 한 번 등장하는 짧은 참/거짓 if문" },
+        { "id": "repeated-type-switch", "text": "배송비·예상 시간·취급 안내처럼 여러 함수가 같은 type 값으로 switch를 반복할 때" },
+        { "id": "arithmetic", "text": "세금 비율 숫자만 상수로 빼고 싶을 때" }
+      ],
+      "answer": "repeated-type-switch",
+      "explanation": "같은 타입 코드로 분기하는 switch/if-else가 여러 연산에 흩어져 있을 때, 각 타입의 책임을 한 클래스에 모으는 효과가 가장 큽니다."
+    },
+    {
+      "id": "q2-factory",
+      "prompt": "다형성으로 리팩터링한 뒤에도 createParcel(data) 팩토리 함수에 분기가 한 곳 남는 이유는?",
+      "options": [
+        { "id": "still-bad", "text": "리팩터링이 덜 끝났기 때문에 팩토리 분기도 반드시 없애야 한다" },
+        { "id": "single-entry", "text": "외부 데이터(JSON 등)를 알맞은 하위 클래스 인스턴스로 바꾸는 지점을 단 한 곳으로 격리하기 위해서" },
+        { "id": "faster-loop", "text": "JavaScript 엔진에서 반복문 속도를 2배 높이기 위해서" }
+      ],
+      "answer": "single-entry",
+      "explanation": "유형 선택을 객체 생성 시점의 팩토리(또는 레지스트리 맵) 한 곳으로 모으면, 이후의 모든 계산·안내 코드에서 switch가 사라집니다."
+    },
+    {
+      "id": "q3-base-class",
+      "prompt": "모든 택배 유형에 공통인 파손 주의 할증(fragileSurcharge)은 어디에 두는 것이 알맞나요?",
+      "options": [
+        { "id": "superclass", "text": "상위 클래스 Parcel에 한 번만 두고 하위 클래스가 상속해 사용한다" },
+        { "id": "copy-each", "text": "StandardParcel, ColdParcel, ExpressParcel마다 똑같이 복사한다" },
+        { "id": "caller-if", "text": "호출하는 화면 코드마다 if (parcel.fragile)을 덧붙인다" }
+      ],
+      "answer": "superclass",
+      "explanation": "공통 상태와 공통 계산은 상위 클래스에 두고, 유형마다 달라지는 부분만 하위 클래스가 재정의(override)해야 중복이 사라집니다."
+    },
+    {
+      "id": "q4-preservation",
+      "prompt": "기존 세 유형(일반·신선 냉장·당일 특송)에 대해 리팩터링 전후의 반환값은 어떻게 되어야 하나요?",
+      "options": [
+        { "id": "same-all", "text": "모든 유효 입력 조합에서 배송비·예상 시간·취급 안내가 이전과 완전히 같아야 한다" },
+        { "id": "cheaper", "text": "구조가 깔끔해졌으니 배송비가 조금 더 낮아져도 괜찮다" },
+        { "id": "only-fee", "text": "배송비만 같으면 안내 문구는 달라져도 무방하다" }
+      ],
+      "answer": "same-all",
+      "explanation": "리팩터링은 겉으로 드러나는 동작을 보존한 채 내부 구조를 바꾸는 작업입니다. 기존 3,600조합 모두에서 세 결과가 정확히 일치해야 합니다."
+    },
+    {
+      "id": "q5-extension",
+      "prompt": "새 배송 유형 'drone'을 추가할 때, 흩어진 switch 구조에서 특히 잘 발생하는 버그는?",
+      "options": [
+        { "id": "syntax-error", "text": "switch 문법 자체가 4개 case를 허용하지 않아 실행이 거부된다" },
+        { "id": "missing-branch", "text": "shippingFee에는 case 'drone'을 넣었지만 handlingGuide 같은 다른 함수에서 case를 빠뜨려 기본값으로 빠진다" },
+        { "id": "memory-leak", "text": "문자열 비교 때문에 브라우저 메모리가 즉시 고갈된다" }
+      ],
+      "answer": "missing-branch",
+      "explanation": "규칙이 여러 함수에 흩어져 있으면 새 유형을 추가할 때 일부 switch를 누락하기 쉽습니다. 다형성에서는 DroneParcel 클래스 한 곳에 세 메서드를 함께 정의합니다."
+    },
+    {
+      "id": "q6-guardrail",
+      "prompt": "다음 중 Replace Conditional with Polymorphism을 서두르지 않는 편이 나은 경우는?",
+      "options": [
+        { "id": "growing-types", "text": "분기 함수가 4곳 이상이고 분기별 새 배송 상품이 매 분기 추가될 때" },
+        { "id": "one-simple-check", "text": "조건 분기가 한 함수에만 아주 짧게 존재하고 앞으로 유형이 늘어날 가능성이 거의 없을 때" },
+        { "id": "shared-override", "text": "공통 기본 동작 위에 특수 유형 2~3개가 규칙을 덮어쓸 때" }
+      ],
+      "answer": "one-simple-check",
+      "explanation": "마틴 파울러도 단순한 분기 하나를 위해 억지로 클래스 계층을 만들지 말라고 권합니다. 작은 단일 분기는 Decompose Conditional이나 단순 테이블이 더 읽기 쉽습니다."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Martin Fowler — Replace Conditional with Polymorphism",
+      "url": "https://refactoring.com/catalog/replaceConditionalWithPolymorphism.html",
+      "note": "타입별 반복 조건문과 기본/변형 오버라이드 리팩터링 카탈로그 원전"
+    },
+    {
+      "title": "Martin Fowler — Replace Type Code with Subclasses",
+      "url": "https://refactoring.com/catalog/replaceTypeCodeWithSubclasses.html",
+      "note": "타입 문자열·코드를 팩토리와 하위 클래스 계층으로 전환하는 선행 리팩터링"
+    }
+  ]
+}
